@@ -9,6 +9,6 @@
 
         //propiedades de Navegacion
         public virtual User User { get; set; }
-        public virtual  Comentario Comentario { get; set; }
+        public virtual Comentario Comentario { get; set; }
     }
 }
