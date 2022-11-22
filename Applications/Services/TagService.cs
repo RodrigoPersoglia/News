@@ -20,13 +20,13 @@ namespace Applications.Services
     public class TagService : ITagService
     {
         #region Fields
-        private readonly ITagQueries _query;
-        private readonly ITagRepository _command;
+        private readonly IQueries<Tag> _query;
+        private readonly ICommands<Tag> _command;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public TagService(IMapper mapper, ITagQueries query, ITagRepository command)
+        public TagService(IMapper mapper, IQueries<Tag> query, ICommands<Tag> command)
         {
             _mapper = mapper;
             _query = query;

@@ -99,6 +99,10 @@ namespace AccesData
                     .WithMany(a => a.Noticias)
                     .HasForeignKey(x => x.CategoriaId);
 
+                entity.HasMany(c => c.Tags)
+                .WithMany(p => p.Noticias)
+                .UsingEntity(j => j.ToTable("Map_Noticia_Tag"));
+
             });
 
 

@@ -138,8 +138,7 @@ namespace AccesData.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ComentarioId")
-                        .IsRequired()
+                    b.Property<int>("ComentarioId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Like")
@@ -218,7 +217,7 @@ namespace AccesData.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("NoticiaTag");
+                    b.ToTable("Map_Noticia_Tag", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Comentario", b =>

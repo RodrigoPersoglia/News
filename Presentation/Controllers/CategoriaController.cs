@@ -1,23 +1,24 @@
 using Applications.Services;
 using Domain.Dtos.Input;
+using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
 
-    [Route("Tags")]
+    [Route("Categorias")]
     [ApiController]
-    public class TagController : ControllerBase
+    public class CategoriaController : ControllerBase
     {
-        private readonly ITagService _service;
+        private readonly ICategoriaService _service;
 
-        public TagController(ITagService service)
+        public CategoriaController(ICategoriaService service)
         {
             _service = service;
         }
 
-        [HttpGet(Name = "GetAll")]
+        [HttpGet(Name = "Categorias/GetAll")]
         public IActionResult GetAll()
         {
             try
@@ -40,11 +41,11 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("Add")]
-        public IActionResult Add(TagDtoAdd tag)
+        public IActionResult Add(CategoriaDtoAdd categoria)
         {
             try
             {
-                _service.Add(tag);
+                _service.Add(categoria);
                 return StatusCode(200);
             }
             catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
@@ -52,11 +53,11 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("Edit")]
-        public IActionResult Edit(TagDtoEdit tag)
+        public IActionResult Edit(CategoriaDtoEdit categoria)
         {
             try
             {
-                _service.Edit(tag);
+                _service.Edit(categoria);
                 return StatusCode(200);
             }
             catch (NullReferenceException)

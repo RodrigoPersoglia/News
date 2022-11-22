@@ -3,6 +3,7 @@ using AccesData.Commands;
 using AccesData.Queries;
 using Applications.Services;
 using AutoMapper;
+using Domain.Entities;
 using Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,11 +18,23 @@ var mapConfir = new MapperConfiguration(m => { m.AddProfile(new AutoMapperProfil
 IMapper mapper = mapConfir.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddScoped<NewsContext>();
-builder.Services.AddTransient<ITagService, TagService>();
-builder.Services.AddTransient<ITagQueries, TagQueries>();
-builder.Services.AddTransient<ITagRepository, TagRepository>();
+builder.Services.AddTransient<NewsContext>();
 
+builder.Services.AddTransient<IQueries<Tag>, Queries<Tag>>();
+builder.Services.AddTransient<ICommands<Tag>, Commands<Tag>>();
+builder.Services.AddTransient<ITagService, TagService>();
+
+builder.Services.AddTransient<IQueries<Categoria>, Queries<Categoria>>();
+builder.Services.AddTransient<ICommands<Categoria>, Commands<Categoria>>();
+builder.Services.AddTransient<ICategoriaService, CategoriaService>();
+
+builder.Services.AddTransient<IQueries<User>, Queries<User>>();
+builder.Services.AddTransient<ICommands<User>, Commands<User>>();
+builder.Services.AddTransient<IUserService, UserService>();
+
+builder.Services.AddTransient<IQueries<Noticia>, Queries<Noticia>>();
+builder.Services.AddTransient<ICommands<Noticia>, Commands<Noticia>>();
+builder.Services.AddTransient<INoticiaService, NoticiaService>();
 
 var app = builder.Build();
 

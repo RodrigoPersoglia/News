@@ -1,23 +1,24 @@
 using Applications.Services;
 using Domain.Dtos.Input;
+using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
 
-    [Route("Tags")]
+    [Route("Noticias")]
     [ApiController]
-    public class TagController : ControllerBase
+    public class NoticiaController : ControllerBase
     {
-        private readonly ITagService _service;
+        private readonly INoticiaService _service;
 
-        public TagController(ITagService service)
+        public NoticiaController(INoticiaService service)
         {
             _service = service;
         }
 
-        [HttpGet(Name = "GetAll")]
+        [HttpGet(Name = "Noticias/GetAll")]
         public IActionResult GetAll()
         {
             try
@@ -40,23 +41,23 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("Add")]
-        public IActionResult Add(TagDtoAdd tag)
+        public IActionResult Add(NoticiaDtoAdd noticia)
         {
-            try
-            {
-                _service.Add(tag);
-                return StatusCode(200);
-            }
-            catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
-            catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
+            //    try
+            //    {
+            _service.Add(noticia);
+            return StatusCode(200);
+            //    }
+            //    catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
+            //    catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
         [HttpPut("Edit")]
-        public IActionResult Edit(TagDtoEdit tag)
+        public IActionResult Edit(NoticiaDtoEdit noticia)
         {
             try
             {
-                _service.Edit(tag);
+                _service.Edit(noticia);
                 return StatusCode(200);
             }
             catch (NullReferenceException)
