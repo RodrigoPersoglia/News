@@ -11,5 +11,6 @@
 
         //propiedades de Navegacion
         public virtual ICollection<Noticia> Noticias { get; set; }
+        public List<Map_Noticia_Tag> Map_Noticia_Tag { get; set; }
     }
 }

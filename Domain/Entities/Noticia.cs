@@ -22,6 +22,7 @@
         public virtual Categoria Categoria { get; set; }
         public virtual ICollection<Comentario> Comentarios { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
+        public List<Map_Noticia_Tag> Map_Noticia_Tag { get; set; }
 
     }
 }

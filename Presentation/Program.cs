@@ -33,8 +33,13 @@ builder.Services.AddTransient<ICommands<User>, Commands<User>>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddTransient<IQueries<Noticia>, Queries<Noticia>>();
+builder.Services.AddTransient<INoticiaQuery, NoticiaQuery>();
 builder.Services.AddTransient<ICommands<Noticia>, Commands<Noticia>>();
 builder.Services.AddTransient<INoticiaService, NoticiaService>();
+
+builder.Services.AddTransient<IComentarioQuery, ComentarioQuery>();
+builder.Services.AddTransient<ICommands<Comentario>, Commands<Comentario>>();
+builder.Services.AddTransient<IComentarioService, ComentarioService>();
 
 var app = builder.Build();
 

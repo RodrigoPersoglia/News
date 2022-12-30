@@ -1,4 +1,5 @@
 using Applications.Services;
+using Domain.Dtos.Input;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -9,21 +10,21 @@ namespace Presentation.Controllers
 
     [Route("[controller]")]
     [ApiController]
-    public class NoticiaController : ControllerBase
+    public class ComentarioController : ControllerBase
     {
-        private readonly INoticiaService _service;
+        private readonly IComentarioService _service;
 
-        public NoticiaController(INoticiaService service)
+        public ComentarioController(IComentarioService service)
         {
             _service = service;
         }
 
         /// <summary>
-        /// Obtiene un listado de todas las noticias
+        /// Obtiene un listado de todas los comentarios
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<NoticiaDtoOut>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<CategoriaDtoOut>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetAll()
         {
@@ -36,11 +37,11 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Obtiene una noticia por id
+        /// Obtiene un comentario por id
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(NoticiaDtoOut))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoriaDtoOut))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetById(int id)
         {
@@ -53,41 +54,48 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Agregar una noticia
+        /// Agregar un comentario
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Add(NoticiaDtoAdd noticia)
+        public IActionResult Add(ComentarioDtoAdd comentario)
         {
             try
             {
-                _service.Add(noticia);
+                _service.Add(comentario);
                 return StatusCode(200);
             }
             catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
+            catch (NotExistException ex) { return StatusCode(404, ex.Message); }
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
         /// <summary>
-        /// Editar una noticia
+        /// Editar un comentario
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public IActionResult Edit(NoticiaDtoEdit noticia)
+        public IActionResult Edit(ComentarioDtoEdit comentario)
         {
             try
             {
-                _service.Edit(noticia);
-            return StatusCode(200);
+                _service.Edit(comentario);
+                return StatusCode(200);
             }
-            catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null");}
-            catch (NotExistException ex){ return StatusCode(404, ex.Message);}
+            catch (NullReferenceException)
+            {
+                return StatusCode(400, "Los datos recibidos no pueden ser null");
+            }
+            catch (NotExistException ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
         /// <summary>
-        /// Eliminar una noticia
+        /// Eliminar un comentario
         /// </summary>
         /// <returns></returns>
         [HttpDelete]

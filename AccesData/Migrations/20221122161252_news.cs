@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AccesData.Migrations
 {
     /// <inheritdoc />
-    public partial class News : Migration
+    public partial class news : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -119,21 +119,21 @@ namespace AccesData.Migrations
                 name: "Map_Noticia_Tag",
                 columns: table => new
                 {
-                    NoticiasId = table.Column<int>(type: "int", nullable: false),
-                    TagsId = table.Column<int>(type: "int", nullable: false)
+                    NoticiaId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Map_Noticia_Tag", x => new { x.NoticiasId, x.TagsId });
+                    table.PrimaryKey("PK_Map_Noticia_Tag", x => new { x.NoticiaId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_Map_Noticia_Tag_Noticia_NoticiasId",
-                        column: x => x.NoticiasId,
+                        name: "FK_Map_Noticia_Tag_Noticia_NoticiaId",
+                        column: x => x.NoticiaId,
                         principalTable: "Noticia",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Map_Noticia_Tag_Tag_TagsId",
-                        column: x => x.TagsId,
+                        name: "FK_Map_Noticia_Tag_Tag_TagId",
+                        column: x => x.TagId,
                         principalTable: "Tag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -157,13 +157,13 @@ namespace AccesData.Migrations
                         column: x => x.ComentarioId,
                         principalTable: "Comentario",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reaccion_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -182,9 +182,9 @@ namespace AccesData.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Map_Noticia_Tag_TagsId",
+                name: "IX_Map_Noticia_Tag_TagId",
                 table: "Map_Noticia_Tag",
-                column: "TagsId");
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Noticia_CategoriaId",

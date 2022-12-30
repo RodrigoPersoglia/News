@@ -1,4 +1,7 @@
-﻿namespace AccesData.Queries
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
+namespace AccesData.Queries
 {
     #region Interface IQueries
     public interface IQueries<T> where T : class
@@ -11,19 +14,22 @@
     public class Queries<T> : IQueries<T> where T : class
     {
         private readonly NewsContext _context;
+        private readonly DbSet<T> _entities;
 
         public Queries(NewsContext context)
         {
             _context = context;
+            _entities = context.Set<T>();
         }
         public List<T> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return _entities.ToList();
         }
 
         public T GetById(int Id)
         {
-            return _context.Set<T>().Find(Id);
+            return _entities.Find(Id);
         }
+
     }
 }

@@ -14,7 +14,6 @@ namespace AccesData
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(@"Server=G100603NT283;Database=News;Trusted_Connection=True;");
             optionsBuilder.UseSqlServer(@"Server=RODRIGONOTEBOOK\SQLEXPRESS;Database=News;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
         }
 
@@ -99,11 +98,22 @@ namespace AccesData
                     .WithMany(a => a.Noticias)
                     .HasForeignKey(x => x.CategoriaId);
 
-                entity.HasMany(c => c.Tags)
-                .WithMany(p => p.Noticias)
-                .UsingEntity(j => j.ToTable("Map_Noticia_Tag"));
-
-            });
+                entity.HasMany(p => p.Tags)
+                    .WithMany(p => p.Noticias)
+                    .UsingEntity<Map_Noticia_Tag>(
+                        j => j
+                            .HasOne(pt => pt.Tag)
+                            .WithMany(t => t.Map_Noticia_Tag)
+                            .HasForeignKey(pt => pt.TagId),
+                        j => j
+                            .HasOne(pt => pt.Noticia)
+                            .WithMany(p => p.Map_Noticia_Tag)
+                            .HasForeignKey(pt => pt.NoticiaId),
+                        j =>
+                        {
+                            j.HasKey(t => new { t.NoticiaId, t.TagId });
+                        });
+                    });
 
 
         }

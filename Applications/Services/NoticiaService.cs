@@ -20,7 +20,7 @@ namespace Applications.Services
     public class NoticiaService : INoticiaService
     {
         #region Fields
-        private readonly IQueries<Noticia> _query;
+        private readonly INoticiaQuery _query;
         private readonly IQueries<Categoria> _queryCategoria;
         private readonly IQueries<Tag> _queryTag;
         private readonly ICommands<Noticia> _command;
@@ -28,7 +28,7 @@ namespace Applications.Services
         #endregion
 
         #region Constructor
-        public NoticiaService(IMapper mapper, IQueries<Noticia> query, ICommands<Noticia> command, IQueries<Categoria> queryCategoria, IQueries<Tag> queryTag)
+        public NoticiaService(IMapper mapper, INoticiaQuery query, ICommands<Noticia> command, IQueries<Categoria> queryCategoria, IQueries<Tag> queryTag)
         {
             _mapper = mapper;
             _query = query;
@@ -39,8 +39,9 @@ namespace Applications.Services
         #endregion
 
         #region Queries
-        public List<NoticiaDtoOut> GetAll()
+        public  List<NoticiaDtoOut> GetAll()
         {
+            var list = _query.GetAll();
             return _mapper.Map<List<NoticiaDtoOut>>(_query.GetAll());
         }
 
@@ -58,15 +59,16 @@ namespace Applications.Services
             if (noticia == null) { throw new NullReferenceException(); }
             var categoria = _queryCategoria.GetById(noticia.CategoriaId);
             if (categoria == null) { throw new NotExistException(); }
-            List<Tag> tags = new List<Tag>();
-            foreach(var item in noticia.TagsId)
+            var entity = _mapper.Map<Noticia>(noticia);
+            var tags = new List<Map_Noticia_Tag>();
+            foreach (var item in noticia.TagsId)
             {
                 var tag = _queryTag.GetById(item);
-                if (tag != null) { tags.Add(tag); }
-                else { throw new NotExistException();}
+                if(tag == null) { throw new NotExistException(); }
+                tags.Add(new Map_Noticia_Tag(){TagId = item, Noticia = entity }); 
+
             }
-            var entity = _mapper.Map<Noticia>(noticia);
-            entity.Tags = tags;
+            entity.Map_Noticia_Tag = tags;
             _command.Add(entity);
         }
 
@@ -80,9 +82,20 @@ namespace Applications.Services
         public void Edit(NoticiaDtoEdit noticia)
         {
             if (noticia == null) { throw new NullReferenceException(); }
-            var entity = GetById(noticia.Id);
-            if (entity == null) { throw new NotExistException(); }
-            _command.Edit(_mapper.Map<Noticia>(noticia));
+            if (GetById(noticia.Id) == null) { throw new NotExistException(); }
+            var entity = _mapper.Map<Noticia>(noticia);
+
+            var tags = new List<Map_Noticia_Tag>();
+            foreach (var item in noticia.TagsId)
+            {
+                var tag = _queryTag.GetById(item);
+                if (tag == null) { throw new NotExistException(); }
+                tags.Add(new Map_Noticia_Tag() { TagId = item, Noticia = entity });
+
+            }
+            entity.Map_Noticia_Tag = tags;
+
+            _command.Edit(entity);
         }
         #endregion
     }

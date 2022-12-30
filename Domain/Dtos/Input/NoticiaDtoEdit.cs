@@ -13,10 +13,8 @@ namespace Domain.Entities
         public string Cuerpo { get; set; }
         public string Imagen { get; set; }
         public string? Epigrafe { get; set; }
-
-        public CategoriaDtoOut Categoria { get; set; }
-        public virtual ICollection<ComentarioDtoOut> Comentarios { get; set; }
-        public ICollection<TagDtoOut> Tags { get; set; }
+        public int CategoriaId { get; set; }
+        public List<int> TagsId { get; set; }
 
     }
 }

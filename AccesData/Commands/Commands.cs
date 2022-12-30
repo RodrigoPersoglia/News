@@ -2,7 +2,7 @@
 
 namespace AccesData.Commands
 {
-    #region interface ITagRepository
+    #region interface IRepository
     public interface ICommands<T> where T : class
     {
         public void Add(T entity);
@@ -13,27 +13,29 @@ namespace AccesData.Commands
     public class Commands<T> : ICommands<T> where T : class
     {
         private readonly NewsContext _context;
+        protected readonly DbSet<T> _entities;
 
         public Commands(NewsContext context)
         {
             _context = context;
+            _entities = context.Set<T>();
         }
 
         public void Add(T entity)
         {
-            _context.Set<T>().Add(entity);
+            _entities.Add(entity);
             _context.SaveChanges();
         }
 
         public void Delete(T entity)
         {
-            _context.Set<T>().Remove(entity);
+            _entities.Remove(entity);
             _context.SaveChanges();
         }
 
         public void Edit(T entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            _entities.Update(entity);
             _context.SaveChanges();
         }
     }

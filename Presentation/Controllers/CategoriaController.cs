@@ -1,13 +1,13 @@
 using Applications.Services;
-using Domain.Dtos.Input;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Presentation.Controllers
 {
 
-    [Route("Categorias")]
+    [Route("[controller]")]
     [ApiController]
     public class CategoriaController : ControllerBase
     {
@@ -18,7 +18,14 @@ namespace Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet(Name = "Categorias/GetAll")]
+
+        /// <summary>
+        /// Obtiene un listado de todas las categorías
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<CategoriaDtoOut>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetAll()
         {
             try
@@ -29,7 +36,14 @@ namespace Presentation.Controllers
 
         }
 
+
+        /// <summary>
+        /// Obtiene una categoria por id
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategoriaDtoOut))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetById(int id)
         {
             try
@@ -40,7 +54,13 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpPost("Add")]
+
+        /// <summary>
+        /// Agregar una categoría
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Add(CategoriaDtoAdd categoria)
         {
             try
@@ -52,7 +72,13 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpPut("Edit")]
+
+        /// <summary>
+        /// Editar una categoría
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Edit(CategoriaDtoEdit categoria)
         {
             try
@@ -71,7 +97,13 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpDelete("Delete")]
+
+        /// <summary>
+        /// Eliminar una categoría
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Delete(int id)
         {
             try

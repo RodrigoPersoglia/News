@@ -78,6 +78,21 @@ namespace AccesData.Migrations
                     b.ToTable("Comentario", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Map_Noticia_Tag", b =>
+                {
+                    b.Property<int>("NoticiaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NoticiaId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("Map_Noticia_Tag");
+                });
+
             modelBuilder.Entity("Domain.Entities.Noticia", b =>
                 {
                     b.Property<int>("Id")
@@ -205,21 +220,6 @@ namespace AccesData.Migrations
                     b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("NoticiaTag", b =>
-                {
-                    b.Property<int>("NoticiasId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("NoticiasId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("Map_Noticia_Tag", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.Comentario", b =>
                 {
                     b.HasOne("Domain.Entities.Comentario", "ComentarioOriginal")
@@ -243,6 +243,25 @@ namespace AccesData.Migrations
                     b.Navigation("Noticia");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Map_Noticia_Tag", b =>
+                {
+                    b.HasOne("Domain.Entities.Noticia", "Noticia")
+                        .WithMany("Map_Noticia_Tag")
+                        .HasForeignKey("NoticiaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Tag", "Tag")
+                        .WithMany("Map_Noticia_Tag")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Noticia");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Domain.Entities.Noticia", b =>
@@ -275,21 +294,6 @@ namespace AccesData.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoticiaTag", b =>
-                {
-                    b.HasOne("Domain.Entities.Noticia", null)
-                        .WithMany()
-                        .HasForeignKey("NoticiasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.Categoria", b =>
                 {
                     b.Navigation("Noticias");
@@ -303,6 +307,13 @@ namespace AccesData.Migrations
             modelBuilder.Entity("Domain.Entities.Noticia", b =>
                 {
                     b.Navigation("Comentarios");
+
+                    b.Navigation("Map_Noticia_Tag");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Tag", b =>
+                {
+                    b.Navigation("Map_Noticia_Tag");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

@@ -9,6 +9,9 @@ namespace Presentation
     {
         public AutoMapperProfile()
         {
+
+            CreateMap<Reaccion, ReaccionDtoOut>().ReverseMap();
+
             CreateMap<Tag, TagDtoEdit>();
             CreateMap<TagDtoEdit, Tag>();
             CreateMap<TagDtoOut, Tag>();
@@ -31,12 +34,15 @@ namespace Presentation
             CreateMap<UserDtoAdd, User>();
 
 
-            CreateMap<Noticia, NoticiaDtoEdit>();
-            CreateMap<NoticiaDtoEdit, Noticia>();
-            CreateMap<NoticiaDtoOut, Noticia>();
-            CreateMap<Noticia, NoticiaDtoOut>();
+            CreateMap<Noticia, NoticiaDtoEdit>().ReverseMap();
+            CreateMap<Noticia, NoticiaDtoOut>().ReverseMap();
             CreateMap<Noticia, NoticiaDtoAdd>();
             CreateMap<NoticiaDtoAdd, Noticia>();
+
+            CreateMap<Comentario, ComentarioDtoEdit>().ReverseMap();
+            CreateMap<Comentario, ComentarioDtoOut>().ReverseMap();
+            CreateMap<ComentarioDtoAdd, Comentario>();
+
         }
     }
 }
