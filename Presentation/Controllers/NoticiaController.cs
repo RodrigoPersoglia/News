@@ -6,10 +6,7 @@ using System.Net;
 
 namespace Presentation.Controllers
 {
-
-    [Route("[controller]")]
-    [ApiController]
-    public class NoticiaController : ControllerBase
+    public class NoticiaController : NewsControllerBase
     {
         private readonly INoticiaService _service;
 
@@ -19,7 +16,7 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Obtiene un listado de todas las noticias
+        /// Obtiene un listado de todas las noticias.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -36,7 +33,7 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Obtiene una noticia por id
+        /// Obtiene una noticia por id.
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
@@ -53,7 +50,7 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Agregar una noticia
+        /// Agregar una noticia.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -70,27 +67,29 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Editar una noticia
+        /// Editar una noticia.
         /// </summary>
         /// <returns></returns>
         [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Edit(NoticiaDtoEdit noticia)
         {
             try
             {
                 _service.Edit(noticia);
-            return StatusCode(200);
+                return StatusCode(200);
             }
-            catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null");}
-            catch (NotExistException ex){ return StatusCode(404, ex.Message);}
+            catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
+            catch (NotExistException ex) { return StatusCode(404, ex.Message); }
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
         /// <summary>
-        /// Eliminar una noticia
+        /// Eliminar una noticia.
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Delete(int id)
         {
             try

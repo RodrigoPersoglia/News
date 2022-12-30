@@ -1,5 +1,4 @@
 using Applications.Services;
-using Domain.Dtos.Input;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +6,7 @@ using System.Net;
 
 namespace Presentation.Controllers
 {
-
-    [Route("[controller]")]
-    [ApiController]
-    public class ComentarioController : ControllerBase
+    public class ComentarioController : NewsControllerBase
     {
         private readonly IComentarioService _service;
 
@@ -20,7 +16,7 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Obtiene un listado de todas los comentarios
+        /// Obtiene un listado de todos los comentarios.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -37,7 +33,7 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Obtiene un comentario por id
+        /// Obtiene un comentario por id.
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
@@ -54,7 +50,7 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Agregar un comentario
+        /// Agregar un comentario.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -72,10 +68,11 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Editar un comentario
+        /// Editar un comentario.
         /// </summary>
         /// <returns></returns>
         [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Edit(ComentarioDtoEdit comentario)
         {
             try
@@ -83,14 +80,8 @@ namespace Presentation.Controllers
                 _service.Edit(comentario);
                 return StatusCode(200);
             }
-            catch (NullReferenceException)
-            {
-                return StatusCode(400, "Los datos recibidos no pueden ser null");
-            }
-            catch (NotExistException ex)
-            {
-                return StatusCode(404, ex.Message);
-            }
+            catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
+            catch (NotExistException ex) { return StatusCode(404, ex.Message); }
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
@@ -99,6 +90,7 @@ namespace Presentation.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Delete(int id)
         {
             try

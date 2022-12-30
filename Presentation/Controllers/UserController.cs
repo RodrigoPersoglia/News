@@ -1,15 +1,12 @@
 using Applications.Services;
-using Domain.Dtos.Input;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Presentation.Controllers
 {
-
-    [Route("Users")]
-    [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : NewsControllerBase
     {
         private readonly IUserService _service;
 
@@ -18,7 +15,13 @@ namespace Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet(Name = "Users/GetAll")]
+        /// <summary>
+        /// Obtiene un listado de todas los usuarios.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<UserDtoOut>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetAll()
         {
             try
@@ -29,7 +32,13 @@ namespace Presentation.Controllers
 
         }
 
+        /// <summary>
+        /// Obtiene un usuario por id.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserDtoOut))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetById(int id)
         {
             try
@@ -40,7 +49,12 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpPost("Add")]
+        /// <summary>
+        /// Agregar un usuario.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Add(UserDtoAdd user)
         {
             try
@@ -52,7 +66,12 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpPut("Edit")]
+        /// <summary>
+        /// Editar un usuario.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Edit(UserDtoEdit user)
         {
             try
@@ -71,7 +90,12 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpDelete("Delete")]
+        /// <summary>
+        /// Eliminar un usuario.
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Delete(int id)
         {
             try

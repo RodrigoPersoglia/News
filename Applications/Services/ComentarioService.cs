@@ -1,11 +1,8 @@
 ﻿using AccesData.Commands;
 using AccesData.Queries;
 using AutoMapper;
-using Domain.Dtos.Input;
-using Domain.Dtos.Output;
 using Domain.Entities;
 using Domain.Exceptions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Applications.Services
 {

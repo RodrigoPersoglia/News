@@ -1,14 +1,13 @@
 using Applications.Services;
 using Domain.Dtos.Input;
+using Domain.Dtos.Output;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Presentation.Controllers
 {
-
-    [Route("Tags")]
-    [ApiController]
-    public class TagController : ControllerBase
+    public class TagController : NewsControllerBase
     {
         private readonly ITagService _service;
 
@@ -17,7 +16,13 @@ namespace Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet(Name = "GetAll")]
+        /// <summary>
+        /// Obtiene un listado de todas los tags.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<TagDtoOut>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetAll()
         {
             try
@@ -28,7 +33,13 @@ namespace Presentation.Controllers
 
         }
 
+        /// <summary>
+        /// Obtiene un tag por id.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(TagDtoOut))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetById(int id)
         {
             try
@@ -39,7 +50,12 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpPost("Add")]
+        /// <summary>
+        /// Agregar un tag.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Add(TagDtoAdd tag)
         {
             try
@@ -51,7 +67,12 @@ namespace Presentation.Controllers
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpPut("Edit")]
+        /// <summary>
+        /// Editar un tag.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Edit(TagDtoEdit tag)
         {
             try
@@ -59,18 +80,17 @@ namespace Presentation.Controllers
                 _service.Edit(tag);
                 return StatusCode(200);
             }
-            catch (NullReferenceException)
-            {
-                return StatusCode(400, "Los datos recibidos no pueden ser null");
-            }
-            catch (NotExistException ex)
-            {
-                return StatusCode(404, ex.Message);
-            }
+            catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
+            catch (NotExistException ex) { return StatusCode(404, ex.Message); }
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
-        [HttpDelete("Delete")]
+        /// <summary>
+        /// Eliminar un tag.
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Delete(int id)
         {
             try

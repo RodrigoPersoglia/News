@@ -113,7 +113,7 @@ namespace AccesData
                         {
                             j.HasKey(t => new { t.NoticiaId, t.TagId });
                         });
-                    });
+            });
 
 
         }

@@ -9,40 +9,27 @@ namespace Presentation
     {
         public AutoMapperProfile()
         {
+            CreateMap<Tag, TagDtoEdit>().ReverseMap();
+            CreateMap<TagDtoOut, Tag>().ReverseMap();
+            CreateMap<Tag, TagDtoAdd>().ReverseMap();
 
-            CreateMap<Reaccion, ReaccionDtoOut>().ReverseMap();
+            CreateMap<Categoria, CategoriaDtoEdit>().ReverseMap();
+            CreateMap<Categoria, CategoriaDtoOut>().ReverseMap();
+            CreateMap<Categoria, CategoriaDtoAdd>().ReverseMap();
 
-            CreateMap<Tag, TagDtoEdit>();
-            CreateMap<TagDtoEdit, Tag>();
-            CreateMap<TagDtoOut, Tag>();
-            CreateMap<Tag, TagDtoOut>();
-            CreateMap<Tag, TagDtoAdd>();
-            CreateMap<TagDtoAdd, Tag>();
-
-            CreateMap<Categoria, CategoriaDtoEdit>();
-            CreateMap<CategoriaDtoEdit, Categoria>();
-            CreateMap<CategoriaDtoOut, Categoria>();
-            CreateMap<Categoria, CategoriaDtoOut>();
-            CreateMap<Categoria, CategoriaDtoAdd>();
-            CreateMap<CategoriaDtoAdd, Categoria>();
-
-            CreateMap<User, UserDtoEdit>();
-            CreateMap<UserDtoEdit, User>();
-            CreateMap<UserDtoOut, User>();
-            CreateMap<User, UserDtoOut>();
-            CreateMap<User, UserDtoAdd>();
-            CreateMap<UserDtoAdd, User>();
-
+            CreateMap<User, UserDtoEdit>().ReverseMap();
+            CreateMap<User, UserDtoOut>().ReverseMap();
+            CreateMap<User, UserDtoAdd>().ReverseMap();
 
             CreateMap<Noticia, NoticiaDtoEdit>().ReverseMap();
             CreateMap<Noticia, NoticiaDtoOut>().ReverseMap();
-            CreateMap<Noticia, NoticiaDtoAdd>();
-            CreateMap<NoticiaDtoAdd, Noticia>();
+            CreateMap<Noticia, NoticiaDtoAdd>().ReverseMap();
 
             CreateMap<Comentario, ComentarioDtoEdit>().ReverseMap();
             CreateMap<Comentario, ComentarioDtoOut>().ReverseMap();
-            CreateMap<ComentarioDtoAdd, Comentario>();
+            CreateMap<Comentario, ComentarioDtoAdd>().ReverseMap();
 
+            CreateMap<Reaccion, ReaccionDtoOut>().ReverseMap();
         }
     }
 }

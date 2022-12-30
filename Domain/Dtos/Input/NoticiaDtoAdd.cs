@@ -1,6 +1,4 @@
-﻿using Domain.Dtos.Output;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class NoticiaDtoAdd
     {

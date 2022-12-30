@@ -1,8 +1,6 @@
 ﻿using AccesData.Commands;
 using AccesData.Queries;
 using AutoMapper;
-using Domain.Dtos.Input;
-using Domain.Dtos.Output;
 using Domain.Entities;
 using Domain.Exceptions;
 
@@ -39,7 +37,7 @@ namespace Applications.Services
         #endregion
 
         #region Queries
-        public  List<NoticiaDtoOut> GetAll()
+        public List<NoticiaDtoOut> GetAll()
         {
             var list = _query.GetAll();
             return _mapper.Map<List<NoticiaDtoOut>>(_query.GetAll());
@@ -64,8 +62,8 @@ namespace Applications.Services
             foreach (var item in noticia.TagsId)
             {
                 var tag = _queryTag.GetById(item);
-                if(tag == null) { throw new NotExistException(); }
-                tags.Add(new Map_Noticia_Tag(){TagId = item, Noticia = entity }); 
+                if (tag == null) { throw new NotExistException(); }
+                tags.Add(new Map_Noticia_Tag() { TagId = item, Noticia = entity });
 
             }
             entity.Map_Noticia_Tag = tags;

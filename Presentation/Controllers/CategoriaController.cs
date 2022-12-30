@@ -6,10 +6,7 @@ using System.Net;
 
 namespace Presentation.Controllers
 {
-
-    [Route("[controller]")]
-    [ApiController]
-    public class CategoriaController : ControllerBase
+    public class CategoriaController : NewsControllerBase
     {
         private readonly ICategoriaService _service;
 
@@ -20,7 +17,7 @@ namespace Presentation.Controllers
 
 
         /// <summary>
-        /// Obtiene un listado de todas las categorías
+        /// Obtiene un listado de todas las categorías.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -38,7 +35,7 @@ namespace Presentation.Controllers
 
 
         /// <summary>
-        /// Obtiene una categoria por id
+        /// Obtiene una categoria por id.
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
@@ -56,7 +53,7 @@ namespace Presentation.Controllers
 
 
         /// <summary>
-        /// Agregar una categoría
+        /// Agregar una categoría.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -74,7 +71,7 @@ namespace Presentation.Controllers
 
 
         /// <summary>
-        /// Editar una categoría
+        /// Editar una categoría.
         /// </summary>
         /// <returns></returns>
         [HttpPut]
@@ -86,20 +83,14 @@ namespace Presentation.Controllers
                 _service.Edit(categoria);
                 return StatusCode(200);
             }
-            catch (NullReferenceException)
-            {
-                return StatusCode(400, "Los datos recibidos no pueden ser null");
-            }
-            catch (NotExistException ex)
-            {
-                return StatusCode(404, ex.Message);
-            }
+            catch (NullReferenceException) { return StatusCode(400, "Los datos recibidos no pueden ser null"); }
+            catch (NotExistException ex) { return StatusCode(404, ex.Message); }
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
 
 
         /// <summary>
-        /// Eliminar una categoría
+        /// Eliminar una categoría.
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
