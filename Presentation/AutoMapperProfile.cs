@@ -22,7 +22,9 @@ namespace Presentation
             CreateMap<User, UserDtoAdd>().ReverseMap();
 
             CreateMap<Noticia, NoticiaDtoEdit>().ReverseMap();
-            CreateMap<Noticia, NoticiaDtoOut>().ReverseMap();
+            CreateMap<Noticia, NoticiaDtoOut>()
+                .ForPath(dest => dest.Tags, opt => opt.MapFrom(ori => ori.NoticiasTags.Select(x => x.Tag)))
+                .ReverseMap();
             CreateMap<Noticia, NoticiaDtoAdd>().ReverseMap();
 
             CreateMap<Comentario, ComentarioDtoEdit>().ReverseMap();

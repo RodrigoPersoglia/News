@@ -2,11 +2,6 @@
 {
     public class Noticia
     {
-        public Noticia()
-        {
-            this.Tags = new HashSet<Tag>();
-        }
-
         public int Id { get; set; }
         public DateTime FechaHora { get; set; }
         public string Titulo { get; set; }
@@ -21,8 +16,7 @@
         //propiedades de Navegacion
         public virtual Categoria Categoria { get; set; }
         public virtual ICollection<Comentario> Comentarios { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
-        public List<Map_Noticia_Tag> Map_Noticia_Tag { get; set; }
+        public List<NoticiaTag> NoticiasTags { get; set; }
 
     }
 }

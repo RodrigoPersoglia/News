@@ -24,7 +24,7 @@ namespace AccesData.Queries
             return _context.Noticia
                 .Include(ca => ca.Categoria)
                 .Include(co => co.Comentarios).ThenInclude(u => u.User)
-                .Include(ta => ta.Tags)
+                .Include(nt => nt.NoticiasTags).ThenInclude(ta => ta.Tag)
                 .ToList();
         }
 
@@ -33,7 +33,7 @@ namespace AccesData.Queries
             return _context.Noticia
                 .Include(ca => ca.Categoria)
                 .Include(co => co.Comentarios).ThenInclude(u => u.User)
-                .Include(ta => ta.Tags)
+                .Include(nt => nt.NoticiasTags).ThenInclude(ta => ta.Tag)
                 .Where(x => x.Id == Id).FirstOrDefault();
         }
 

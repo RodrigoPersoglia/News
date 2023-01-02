@@ -1,6 +1,7 @@
 using Applications.Services;
 using Domain.Entities;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -36,6 +37,7 @@ namespace Presentation.Controllers
         /// Obtiene un usuario por id.
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserDtoOut))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -104,6 +106,25 @@ namespace Presentation.Controllers
                 return StatusCode(200);
             }
             catch (NotExistException ex) { return StatusCode(404, ex.Message); }
+            catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
+        }
+
+        /// <summary>
+        /// Eliminar un usuario.
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost("/Login")]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult Login(UserLogin user)
+        {
+            try
+            {
+                var token = _service.Login(user);
+                return StatusCode(200,token);
+            }
+            catch (NotExistException ex) { return StatusCode(404, ex.Message); }
+            catch (UserException ex) { return StatusCode(401, ex.Message); }
             catch (Exception ex) { return StatusCode(500, "internal Server Error: " + ex.Message); }
         }
     }

@@ -11,6 +11,7 @@ namespace AccesData
         public DbSet<Reaccion> Reaccion { get; set; }
         public DbSet<User> User { get; set; }
 
+        public DbSet<NoticiaTag> NoticiaTag { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -97,25 +98,19 @@ namespace AccesData
                 entity.HasOne(x => x.Categoria)
                     .WithMany(a => a.Noticias)
                     .HasForeignKey(x => x.CategoriaId);
-
-                entity.HasMany(p => p.Tags)
-                    .WithMany(p => p.Noticias)
-                    .UsingEntity<Map_Noticia_Tag>(
-                        j => j
-                            .HasOne(pt => pt.Tag)
-                            .WithMany(t => t.Map_Noticia_Tag)
-                            .HasForeignKey(pt => pt.TagId),
-                        j => j
-                            .HasOne(pt => pt.Noticia)
-                            .WithMany(p => p.Map_Noticia_Tag)
-                            .HasForeignKey(pt => pt.NoticiaId),
-                        j =>
-                        {
-                            j.HasKey(t => new { t.NoticiaId, t.TagId });
-                        });
             });
 
+            modelBuilder.Entity<NoticiaTag>(entity => 
+            {
+                entity.HasKey(e => new { e.NoticiaId, e.TagId});
+                entity.HasOne(x => x.Noticia)
+                    .WithMany(a => a.NoticiasTags)
+                    .HasForeignKey(x => x.NoticiaId);
 
+                entity.HasOne(x => x.Tag)
+                    .WithMany(a => a.NoticiasTags)
+                    .HasForeignKey(x => x.TagId);
+            });
         }
 
     }

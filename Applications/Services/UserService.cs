@@ -3,6 +3,11 @@ using AccesData.Queries;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Applications.Services
 {
@@ -14,6 +19,7 @@ namespace Applications.Services
         public List<UserDtoOut> GetAll();
         public UserDtoOut GetById(int id);
 
+        public string Login(UserLogin user);
     }
     public class UserService : IUserService
     {
@@ -21,14 +27,16 @@ namespace Applications.Services
         private readonly IQueries<User> _query;
         private readonly ICommands<User> _command;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuracion;
         #endregion
 
         #region Constructor
-        public UserService(IMapper mapper, IQueries<User> query, ICommands<User> command)
+        public UserService(IMapper mapper, IQueries<User> query, ICommands<User> command, IConfiguration configuracion)
         {
             _mapper = mapper;
             _query = query;
             _command = command;
+            _configuracion= configuracion ?? throw new ArgumentNullException(nameof(configuracion));
         }
         #endregion
 
@@ -68,5 +76,48 @@ namespace Applications.Services
             _command.Edit(_mapper.Map<User>(user));
         }
         #endregion
+
+
+        private string CrearToken(User usuario)
+        {
+            // Header
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuracion["JwtIssuerOptions:SecretKey"]));
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+            var header = new JwtHeader(signingCredentials);
+
+            //Claims
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.UniqueName, usuario.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
+                new Claim("idUsuario", usuario.Id.ToString())
+            };
+
+
+            var expiration = DateTime.UtcNow.AddDays(3);
+
+            //Payload
+            var payload = new JwtPayload(
+                _configuracion["JwtIssuerOptions:Issuer"],
+                _configuracion["JwtIssuerOptions:Audience"],
+                claims,
+                DateTime.Now,
+                expiration
+                );
+
+            var jwtSecurity = new JwtSecurityToken(header, payload);
+
+            return new JwtSecurityTokenHandler().WriteToken(jwtSecurity);
+        }
+
+        public string Login(UserLogin user)
+        {
+            var userEntity = _query.GetAll().Where(u => u.UserName == user.UserName).FirstOrDefault();
+            if (userEntity == null) { throw new UserException(); }
+            if(userEntity.Password != user.Password) { throw new UserException(); }
+            var token = CrearToken(userEntity);
+            return token;
+        }
     }
 }

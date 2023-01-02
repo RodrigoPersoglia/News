@@ -3,6 +3,7 @@ using AccesData.Queries;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
+using System.Linq;
 
 namespace Applications.Services
 {
@@ -21,18 +22,29 @@ namespace Applications.Services
         private readonly INoticiaQuery _query;
         private readonly IQueries<Categoria> _queryCategoria;
         private readonly IQueries<Tag> _queryTag;
+        private readonly IQueries<NoticiaTag> _queryNoticiaTag;
         private readonly ICommands<Noticia> _command;
+        private readonly ICommandsNoticiaTag _commandNoticiaTag;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public NoticiaService(IMapper mapper, INoticiaQuery query, ICommands<Noticia> command, IQueries<Categoria> queryCategoria, IQueries<Tag> queryTag)
+        public NoticiaService(
+            IMapper mapper,
+            INoticiaQuery query,
+            ICommands<Noticia> command,
+            IQueries<Categoria> queryCategoria,
+            IQueries<Tag> queryTag,
+            ICommandsNoticiaTag commandNoticiaTag,
+            IQueries<NoticiaTag> queryNoticiaTag )
         {
             _mapper = mapper;
             _query = query;
             _queryCategoria = queryCategoria;
             _command = command;
             _queryTag = queryTag;
+            _commandNoticiaTag = commandNoticiaTag;
+            _queryNoticiaTag = queryNoticiaTag;
         }
         #endregion
 
@@ -58,15 +70,15 @@ namespace Applications.Services
             var categoria = _queryCategoria.GetById(noticia.CategoriaId);
             if (categoria == null) { throw new NotExistException(); }
             var entity = _mapper.Map<Noticia>(noticia);
-            var tags = new List<Map_Noticia_Tag>();
+            var tags = new List<NoticiaTag>();
             foreach (var item in noticia.TagsId)
             {
                 var tag = _queryTag.GetById(item);
                 if (tag == null) { throw new NotExistException(); }
-                tags.Add(new Map_Noticia_Tag() { TagId = item, Noticia = entity });
+                tags.Add(new NoticiaTag() { TagId = item, NoticiaId = entity.Id });
 
             }
-            entity.Map_Noticia_Tag = tags;
+            entity.NoticiasTags = tags;
             _command.Add(entity);
         }
 
@@ -80,18 +92,19 @@ namespace Applications.Services
         public void Edit(NoticiaDtoEdit noticia)
         {
             if (noticia == null) { throw new NullReferenceException(); }
-            if (GetById(noticia.Id) == null) { throw new NotExistException(); }
+            var noticiaOld = _query.GetById(noticia.Id);
+            if (noticiaOld == null) { throw new NotExistException(); }
             var entity = _mapper.Map<Noticia>(noticia);
 
-            var tags = new List<Map_Noticia_Tag>();
+            _commandNoticiaTag.DeleteByNoticiaId(noticia.Id);
+            var list = new List<NoticiaTag>();
             foreach (var item in noticia.TagsId)
             {
                 var tag = _queryTag.GetById(item);
                 if (tag == null) { throw new NotExistException(); }
-                tags.Add(new Map_Noticia_Tag() { TagId = item, Noticia = entity });
-
+                list.Add(new NoticiaTag() { NoticiaId = noticia.Id, TagId = item});
             }
-            entity.Map_Noticia_Tag = tags;
+            _commandNoticiaTag.AddRange(list);
 
             _command.Edit(entity);
         }
