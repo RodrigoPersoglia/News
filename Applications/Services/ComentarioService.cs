@@ -6,6 +6,7 @@ using Domain.Exceptions;
 
 namespace Applications.Services
 {
+    #region Interface IComentarioService
     public interface IComentarioService
     {
         public void Add(ComentarioDtoAdd tag);
@@ -13,8 +14,9 @@ namespace Applications.Services
         public void Delete(int id);
         public List<ComentarioDtoOut> GetAll();
         public ComentarioDtoOut GetById(int id);
-
     }
+    #endregion
+
     public class ComentarioService : IComentarioService
     {
         #region Fields

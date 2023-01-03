@@ -11,6 +11,7 @@ using System.Text;
 
 namespace Applications.Services
 {
+    #region Interface IUserService
     public interface IUserService
     {
         public void Add(UserDtoAdd tag);
@@ -21,17 +22,18 @@ namespace Applications.Services
 
         public string Login(UserLogin user);
     }
+    #endregion
     public class UserService : IUserService
     {
         #region Fields
-        private readonly IQueries<User> _query;
+        private readonly IUserQuery _query;
         private readonly ICommands<User> _command;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuracion;
         #endregion
 
         #region Constructor
-        public UserService(IMapper mapper, IQueries<User> query, ICommands<User> command, IConfiguration configuracion)
+        public UserService(IMapper mapper, IUserQuery query, ICommands<User> command, IConfiguration configuracion)
         {
             _mapper = mapper;
             _query = query;
@@ -75,9 +77,18 @@ namespace Applications.Services
             if (entity == null) { throw new NotExistException(); }
             _command.Edit(_mapper.Map<User>(user));
         }
+
+        public string Login(UserLogin user)
+        {
+            var userEntity = _query.GetByUserName(user.UserName);
+            if (userEntity == null) { throw new UserException(); }
+            if (userEntity.Password != user.Password) { throw new UserException(); }
+            var token = CrearToken(userEntity);
+            return token;
+        }
         #endregion
 
-
+        #region Private Method
         private string CrearToken(User usuario)
         {
             // Header
@@ -111,13 +122,6 @@ namespace Applications.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurity);
         }
 
-        public string Login(UserLogin user)
-        {
-            var userEntity = _query.GetAll().Where(u => u.UserName == user.UserName).FirstOrDefault();
-            if (userEntity == null) { throw new UserException(); }
-            if(userEntity.Password != user.Password) { throw new UserException(); }
-            var token = CrearToken(userEntity);
-            return token;
-        }
+        #endregion
     }
 }

@@ -68,7 +68,7 @@ builder.Services.AddTransient<IQueries<Categoria>, Queries<Categoria>>();
 builder.Services.AddTransient<ICommands<Categoria>, Commands<Categoria>>();
 builder.Services.AddTransient<ICategoriaService, CategoriaService>();
 
-builder.Services.AddTransient<IQueries<User>, Queries<User>>();
+builder.Services.AddTransient<IUserQuery, UserQuery>();
 builder.Services.AddTransient<ICommands<User>, Commands<User>>();
 builder.Services.AddTransient<IUserService, UserService>();
 

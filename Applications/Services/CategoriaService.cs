@@ -6,6 +6,7 @@ using Domain.Exceptions;
 
 namespace Applications.Services
 {
+    #region Interface ICategoriaService
     public interface ICategoriaService
     {
         public void Add(CategoriaDtoAdd tag);
@@ -13,8 +14,9 @@ namespace Applications.Services
         public void Delete(int id);
         public List<CategoriaDtoOut> GetAll();
         public CategoriaDtoOut GetById(int id);
-
     }
+    #endregion
+
     public class CategoriaService : ICategoriaService
     {
         #region Fields

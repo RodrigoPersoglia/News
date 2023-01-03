@@ -8,6 +8,7 @@ using Domain.Exceptions;
 
 namespace Applications.Services
 {
+    #region Interface ITagService
     public interface ITagService
     {
         public void Add(TagDtoAdd tag);
@@ -17,6 +18,7 @@ namespace Applications.Services
         public TagDtoOut GetById(int id);
 
     }
+    #endregion
     public class TagService : ITagService
     {
         #region Fields

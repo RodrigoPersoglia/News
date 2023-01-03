@@ -7,8 +7,10 @@ using System.Linq;
 
 namespace Applications.Services
 {
+    #region Interface INoticiaService
     public interface INoticiaService
     {
+        
         public void Add(NoticiaDtoAdd tag);
         public void Edit(NoticiaDtoEdit tag);
         public void Delete(int id);
@@ -16,6 +18,8 @@ namespace Applications.Services
         public NoticiaDtoOut GetById(int id);
 
     }
+    #endregion
+
     public class NoticiaService : INoticiaService
     {
         #region Fields
@@ -69,6 +73,7 @@ namespace Applications.Services
             if (noticia == null) { throw new NullReferenceException(); }
             var categoria = _queryCategoria.GetById(noticia.CategoriaId);
             if (categoria == null) { throw new NotExistException(); }
+
             var entity = _mapper.Map<Noticia>(noticia);
             var tags = new List<NoticiaTag>();
             foreach (var item in noticia.TagsId)
@@ -76,8 +81,8 @@ namespace Applications.Services
                 var tag = _queryTag.GetById(item);
                 if (tag == null) { throw new NotExistException(); }
                 tags.Add(new NoticiaTag() { TagId = item, NoticiaId = entity.Id });
-
             }
+
             entity.NoticiasTags = tags;
             _command.Add(entity);
         }
